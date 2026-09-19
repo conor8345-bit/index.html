@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Kit &amp; Clubs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDF1F4; --surface:#FFFFFF; --ink:#12243B; --muted:#55667B; --line:#D2DBE4;
+  --selbg:rgba(18,36,59,.06); --sel:#12243B; --sel-ink:#FFFFFF;
+  --conor:#237A4B; --conor-ink:#FFFFFF; --conor-tint:#DDF0E4;
+  --ronan:#F0B323; --ronan-ink:#12243B; --ronan-tint:#FBEFC9;
+  --hannah:#C42D78; --hannah-ink:#FFFFFF; --hannah-tint:#F9DCEA;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1826; --surface:#16263B; --ink:#EAF0F7; --muted:#9DADC0; --line:#2A3C55;
+    --selbg:rgba(255,255,255,.07); --sel:#EAF0F7; --sel-ink:#0E1826;
+    --conor:#3DB56F; --conor-ink:#0B1F14; --conor-tint:#1C3B2C;
+    --ronan:#F3C24A; --ronan-ink:#1A1405; --ronan-tint:#3B3216;
+    --hannah:#E5619B; --hannah-ink:#2A0716; --hannah-tint:#452136;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1826; --surface:#16263B; --ink:#EAF0F7; --muted:#9DADC0; --line:#2A3C55;
+  --selbg:rgba(255,255,255,.07); --sel:#EAF0F7; --sel-ink:#0E1826;
+  --conor:#3DB56F; --conor-ink:#0B1F14; --conor-tint:#1C3B2C;
+  --ronan:#F3C24A; --ronan-ink:#1A1405; --ronan-tint:#3B3216;
+  --hannah:#E5619B; --hannah-ink:#2A0716; --hannah-tint:#452136;
+}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.45}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1040px;margin:0 auto;padding:0 18px}
+
+.k-conor{--k:var(--conor);--ki:var(--conor-ink);--kt:var(--conor-tint)}
+.k-ronan{--k:var(--ronan);--ki:var(--ronan-ink);--kt:var(--ronan-tint)}
+.k-hannah{--k:var(--hannah);--ki:var(--hannah-ink);--kt:var(--hannah-tint)}
+
+/* team scarf: one band of colour per child */
+.scarf{height:12px;background:repeating-linear-gradient(90deg,
+  var(--conor) 0 36px,var(--bg) 36px 44px,
+  var(--ronan) 44px 80px,var(--bg) 80px 88px,
+  var(--hannah) 88px 124px,var(--bg) 124px 132px)}
+
+.brand{margin:16px 0 14px;font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:.01em}
+
+/* day strip */
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.day{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:12px;min-height:58px;padding:8px 0 7px;
+  display:flex;flex-direction:column;align-items:center;justify-content:space-between;cursor:pointer}
+.day .dl{font-weight:700;font-size:14px}
+.day.today{box-shadow:inset 0 0 0 2px var(--ink)}
+.day[aria-pressed="true"]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.dots{display:flex;gap:3px;min-height:8px}
+.dots i{display:block;width:8px;height:8px;border-radius:50%}
+.day[aria-pressed="true"] .dots i{box-shadow:0 0 0 1.5px var(--sel-ink)}
+
+/* hero */
+.hero{padding:22px 0 8px}
+.hero h1{margin:0;font-family:var(--display);font-weight:900;font-size:clamp(68px,20vw,156px);line-height:.86;letter-spacing:-.01em}
+.when{margin:10px 0 0;color:var(--muted);font-size:16px}
+.kitline{margin:14px 0 0;font-size:clamp(22px,5.4vw,30px);font-weight:700;line-height:1.2;max-width:22em}
+.kitline.ok{color:var(--muted)}
+.nextline{appearance:none;background:none;border:0;padding:10px 0;margin:6px 0 0;text-align:left;color:var(--muted);font-size:16px;cursor:pointer}
+.nextline u{color:var(--ink);font-weight:600;text-underline-offset:3px;white-space:nowrap}
+
+/* child cards */
+.kids{display:grid;gap:12px;margin:14px 0 0}
+.kid{display:grid;grid-template-columns:10px 1fr;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  animation:rise .22s ease-out both}
+.kid:nth-child(2){animation-delay:.04s}
+.kid:nth-child(3){animation-delay:.08s}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.kid .bar{background:var(--k)}
+.kid .body{padding:14px 16px 16px;min-width:0}
+.kid .head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.kid h2{margin:0;font-family:var(--display);font-weight:800;font-size:34px;line-height:1}
+.acts{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
+.act{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;font-size:19px;font-weight:600}
+.act .time{color:var(--muted);font-weight:500;font-size:16px;font-variant-numeric:tabular-nums}
+.chip{font-size:12.5px;font-weight:700;line-height:1;padding:5px 9px;border-radius:999px;background:var(--k);color:var(--ki)}
+.none{margin:12px 0 0;color:var(--muted)}
+.kid.done .kitact .name{text-decoration:line-through;text-decoration-thickness:2px;opacity:.6}
+.kid.done .chip{opacity:.55}
+
+.pack{appearance:none;min-height:44px;padding:0 14px 0 10px;border-radius:999px;border:2px solid var(--k);background:transparent;
+  font-weight:600;font-size:15px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap}
+.pack .tick{width:22px;height:22px;border-radius:7px;border:2px solid currentColor;display:grid;place-items:center}
+.pack .tick svg{width:14px;height:14px;opacity:0}
+.pack[aria-pressed="true"]{background:var(--k);color:var(--ki)}
+.pack[aria-pressed="true"] .tick svg{opacity:1}
+
+/* whole week */
+.week{margin:40px 0 0;padding-bottom:8px}
+.week h2{margin:0;font-family:var(--display);font-weight:800;font-size:36px;line-height:1}
+.week .cap{margin:6px 0 14px;color:var(--muted);font-size:15px}
+.gridwrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{border-collapse:separate;border-spacing:0;width:100%;min-width:780px}
+th,td{padding:8px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line);border-right:1px solid var(--line);font-size:14px;line-height:1.25}
+tr:last-child th,tr:last-child td{border-bottom:0}
+th:last-child,td:last-child{border-right:0}
+thead th{padding:6px 4px}
+th.who{position:sticky;left:0;z-index:1;background:var(--surface);min-width:96px;border-left:8px solid var(--k);vertical-align:middle}
+thead th.who{border-left-color:transparent}
+th.who .nm{font-family:var(--display);font-weight:800;font-size:24px;line-height:1}
+.dayb{appearance:none;background:none;border:0;padding:8px 6px;font-weight:700;font-size:14px;cursor:pointer;border-radius:8px;position:relative}
+th.today .dayb::after{content:"";position:absolute;left:50%;bottom:1px;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--ink)}
+td.sel,thead th.sel{background:var(--selbg)}
+.a{padding:6px 8px;border-radius:8px;color:var(--muted)}
+.a+.a{margin-top:6px}
+.a.kit{background:var(--kt);color:var(--ink);font-weight:600;box-shadow:inset 4px 0 0 var(--k);padding-left:12px}
+.a .tm{font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums;margin-left:4px}
+
+footer{padding:22px 0 40px;color:var(--muted);font-size:14px}
+
+@media (min-width:900px){
+  .kids{grid-template-columns:repeat(3,1fr)}
+  .hero{padding-top:34px}
+  .days{max-width:560px}
+}
+@media (prefers-reduced-motion:reduce){
+  .kid{animation:none}
+}
+</style>
+</head>
+<body>
+
+<div class="scarf" aria-hidden="true"></div>
+
+<header class="wrap">
+  <p class="brand">Kit &amp; Clubs</p>
+  <nav class="days" id="days" aria-label="Choose a day"></nav>
+  <div class="hero">
+    <h1 id="dayName"></h1>
+    <p class="when" id="when"></p>
+    <p class="kitline" id="kitline" aria-live="polite"></p>
+    <button class="nextline" id="nextline" type="button" hidden></button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="kids" id="kids" aria-label="What each child has on"></section>
+
+  <section class="week" aria-labelledby="weekTitle">
+    <h2 id="weekTitle">The whole week</h2>
+    <p class="cap">Shaded blocks need kit. Tap a day name to open it.</p>
+    <div class="gridwrap"><table id="grid"></table></div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>Packed ticks are saved on this device only.</p>
+</footer>
+
+<script>
+(function(){
+  const KIDS=[{id:'conor',name:'Conor'},{id:'ronan',name:'Ronan'},{id:'hannah',name:'Hannah'}];
+  const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  const SHORT=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  // kit:true means a bag of kit is needed that day
+  const SCHED={
+    conor:[
+      [{t:'Period 8'}],
+      [{t:'U15 Rugby',kit:true}],
+      [{t:'U15 Hockey',kit:true},{t:'PE',kit:true}],
+      [{t:'Games',kit:true}],
+      [{t:'PE',kit:true}],
+      [{t:'Rugby',kit:true}],
+      [{t:'Cobham Rugby',kit:true}]
+    ],
+    ronan:[
+      [{t:'U13 Hockey',kit:true}],
+      [{t:'U13 Rugby',kit:true}],
+      [{t:'Games',kit:true}],
+      [{t:'U13 Rugby',time:'7:45',kit:true}],
+      [{t:'PE',kit:true},{t:'Guitar',time:'6:15'}],
+      [{t:'Rugby',kit:true}],
+      [{t:'Cobham Rugby',kit:true}]
+    ],
+    hannah:[
+      [{t:'Swim',time:'6pm',kit:true}],
+      [],
+      [{t:'Street Dance',time:'8am',note:'ND',kit:true},{t:'Jembe Club',time:'10:30'}],
+      [],
+      [{t:'Songwriters',time:'10:30'},{t:'Singstar',time:'2:10'},{t:'Drama',time:'4\u20135',note:'ND'}],
+      [{t:'Stagecoach'}],
+      []
+    ]
+  };
+
+  const $=s=>document.querySelector(s);
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const joinNames=a=>a.length<=1?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const now=new Date();
+  const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const todayIdx=(today.getDay()+6)%7;
+  const offsetFor=i=>(i-todayIdx+7)%7;
+  const dateFor=i=>{const d=new Date(today);d.setDate(today.getDate()+offsetFor(i));return d;};
+  const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+
+  // packed ticks: per device, per date
+  const KEY='kitclubs-packed-v1';
+  let packed={};
+  try{
+    const raw=JSON.parse(localStorage.getItem(KEY)||'{}');
+    if(raw&&typeof raw==='object'&&!Array.isArray(raw)) packed=raw;
+  }catch(e){packed={};}
+  function savePacked(){
+    try{
+      const cutoff=iso(new Date(today.getFullYear(),today.getMonth(),today.getDate()-2));
+      Object.keys(packed).forEach(k=>{if(k.split('|')[0]<cutoff) delete packed[k];});
+      localStorage.setItem(KEY,JSON.stringify(packed));
+    }catch(e){}
+  }
+
+  const kitKids=i=>KIDS.filter(k=>SCHED[k.id][i].some(a=>a.kit));
+  let sel=todayIdx;
+
+  function renderStrip(){
+    $('#days').innerHTML=DAYS.map((d,i)=>{
+      const ks=kitKids(i);
+      const label=d+(ks.length?', kit for '+joinNames(ks.map(k=>k.name)):', no kit');
+      return '<button type="button" class="day'+(i===todayIdx?' today':'')+'" data-i="'+i+'" aria-label="'+esc(label)+'" aria-pressed="false">'+
+        '<span class="dl">'+SHORT[i]+'</span>'+
+        '<span class="dots">'+ks.map(k=>'<i style="background:var(--'+k.id+')"></i>').join('')+'</span></button>';
+    }).join('');
+  }
+
+  function updateKitLine(){
+    const ks=kitKids(sel);
+    const dk=iso(dateFor(sel));
+    const left=ks.filter(k=>!packed[dk+'|'+k.id]);
+    let t;
+    if(!ks.length) t='No kit needed.';
+    else if(!left.length) t='All kit packed.';
+    else if(left.length<ks.length) t='Still to pack: '+joinNames(left.map(k=>k.name))+'.';
+    else t=joinNames(ks.map(k=>k.name))+(ks.length===1?' needs':' need')+' kit.';
+    const el=$('#kitline');
+    el.textContent=t;
+    el.classList.toggle('ok',!ks.length||!left.length);
+  }
+
+  function renderHero(){
+    $('#dayName').textContent=DAYS[sel];
+    const off=offsetFor(sel);
+    const d=dateFor(sel);
+    const ds=d.getDate()+' '+MONTHS[d.getMonth()];
+    $('#when').textContent=off===0?'Today, '+ds:off===1?'Tomorrow, '+ds:'In '+off+' days, '+ds;
+    updateKitLine();
+    const nb=$('#nextline');
+    if(sel===todayIdx){
+      const ti=(todayIdx+1)%7;
+      const ks=kitKids(ti);
+      const what=ks.length?joinNames(ks.map(k=>k.name))+(ks.length===1?' needs':' need')+' kit.':'no kit needed.';
+      nb.dataset.i=ti;
+      nb.innerHTML='Tomorrow, '+DAYS[ti]+': '+esc(what)+' <u>See '+DAYS[ti]+'</u>';
+      nb.hidden=false;
+    }else{
+      nb.hidden=true;
+    }
+  }
+
+  function renderKids(){
+    const dk=iso(dateFor(sel));
+    $('#kids').innerHTML=KIDS.map(k=>{
+      const acts=SCHED[k.id][sel];
+      const needs=acts.some(a=>a.kit);
+      const key=dk+'|'+k.id;
+      const on=!!packed[key];
+      const list=acts.length
+        ?'<ul class="acts">'+acts.map(a=>
+            '<li class="act'+(a.kit?' kitact':'')+'"><span class="name">'+esc(a.t)+'</span>'+
+            (a.time?'<span class="time">'+esc(a.time)+'</span>':'')+
+            (a.note?'<span class="time">'+esc(a.note)+'</span>':'')+
+            (a.kit?'<span class="chip">Kit</span>':'')+'</li>').join('')+'</ul>'
+        :'<p class="none">Nothing on.</p>';
+      const btn=needs
+        ?'<button class="pack" type="button" data-key="'+key+'" aria-pressed="'+on+'">'+
+           '<span class="tick" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5l3 3 6-7"/></svg></span>'+
+           '<span class="lbl">'+(on?'Packed':'Mark packed')+'</span></button>'
+        :'';
+      return '<article class="kid k-'+k.id+(needs&&on?' done':'')+'"><div class="bar"></div><div class="body">'+
+        '<div class="head"><h2>'+k.name+'</h2>'+btn+'</div>'+list+'</div></article>';
+    }).join('');
+  }
+
+  function renderGrid(){
+    let h='<thead><tr><th class="who" scope="col"><span class="sr">Child</span></th>';
+    DAYS.forEach((d,i)=>{
+      h+='<th scope="col" data-i="'+i+'" class="'+(i===todayIdx?'today':'')+'"><button type="button" class="dayb" data-i="'+i+'" aria-label="Show '+d+'">'+SHORT[i]+'</button></th>';
+    });
+    h+='</tr></thead><tbody>';
+    KIDS.forEach(k=>{
+      h+='<tr class="k-'+k.id+'"><th class="who" scope="row"><span class="nm">'+k.name+'</span></th>';
+      DAYS.forEach((d,i)=>{
+        h+='<td data-i="'+i+'">'+SCHED[k.id][i].map(a=>
+          '<div class="a'+(a.kit?' kit':'')+'"><span>'+esc(a.t)+'</span>'+
+          (a.time?'<span class="tm">'+esc(a.time)+'</span>':'')+
+          (a.note?'<span class="tm">'+esc(a.note)+'</span>':'')+'</div>').join('')+'</td>';
+      });
+      h+='</tr>';
+    });
+    h+='</tbody>';
+    $('#grid').innerHTML=h;
+  }
+
+  function markSel(){
+    document.querySelectorAll('.day').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.i===sel)));
+    document.querySelectorAll('#grid th[data-i], #grid td[data-i]').forEach(c=>c.classList.toggle('sel',+c.dataset.i===sel));
+  }
+
+  function select(i,scrollTop){
+    sel=i;
+    renderHero();
+    renderKids();
+    markSel();
+    if(scrollTop) window.scrollTo({top:0,behavior:reduce?'auto':'smooth'});
+  }
+
+  $('#days').addEventListener('click',e=>{
+    const b=e.target.closest('.day');
+    if(b) select(+b.dataset.i,false);
+  });
+  $('#grid').addEventListener('click',e=>{
+    const b=e.target.closest('.dayb');
+    if(b) select(+b.dataset.i,true);
+  });
+  $('#nextline').addEventListener('click',e=>{
+    select(+e.currentTarget.dataset.i,false);
+  });
+  $('#kids').addEventListener('click',e=>{
+    const b=e.target.closest('.pack');
+    if(!b) return;
+    const key=b.dataset.key;
+    const on=!packed[key];
+    if(on) packed[key]=true; else delete packed[key];
+    savePacked();
+    b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.lbl').textContent=on?'Packed':'Mark packed';
+    b.closest('.kid').classList.toggle('done',on);
+    updateKitLine();
+  });
+
+  renderStrip();
+  renderGrid();
+  select(todayIdx,false);
+})();
+</script>
+</body>
+</html>
